@@ -1,10 +1,22 @@
-const { response } = require('express');
+// const { response } = require('express');
 const express = require('express');
 const controller = express.Router();
 
 const studentData = require('../studentData.json');
 
 controller.get('/', (request, response) => {
+
+    // how do i handle a query string? 
+    let { limit=25 } = request.query; // '10'
+    // convert string to number: 
+    limit = Number(limit)
+    // console.log(limit); // 10
+
+    // how do I change the student data according to the limit? 
+    // studentData.students = [ 25 items]
+    // studentData.students = studentData.students.slice(0, limit)
+    let studentDataForDelivery = {...studentData};
+    studentDataForDelivery.students = studentDataForDelivery.students.slice(0, limit);
     // response.send('Hello from the students controller')
     // response.json({hello: "world"})
     response.json({studentData})
@@ -14,6 +26,8 @@ controller.get('/', (request, response) => {
 // create a controller to handle a get request, a get for a specific 
 // student. First, we have to turn this id into something we could use 
 // const studentId = request.params.id;
+// It is not an async because we're currently working from a static file,
+// we'll switch to an async solution once we write our database
 controller.get('/:id', (request, response) => {
     try{ 
         const studentId = request.params.id;
